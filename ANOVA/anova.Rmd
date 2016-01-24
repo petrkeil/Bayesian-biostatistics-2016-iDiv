@@ -1,0 +1,82 @@
+---
+title: "ANOVA -- part 1"
+author: "Petr Keil"
+date: "February 2015"
+output:
+  html_document:
+    highlight: pygments
+    number_sections: yes
+    theme: cerulean
+  pdf_document: default
+---
+
+```{r, echo=FALSE}
+  ngroups <- 5
+  nsample <- 10
+  pop.means <- c(50, 40, 45, 55, 60)
+  sigma <- 3
+  
+  n <- ngroups*nsample
+  eps <- rnorm(n, 0, sigma)
+  
+  x <- rep(1:5, rep(nsample, ngroups))
+  means <- rep(pop.means, rep(nsample, ngroups))
+  X <- as.matrix(model.matrix(~as.factor(x)-1))
+  snout <- round( as.numeric(X %*% as.matrix(pop.means) + eps), 2)
+  snakes <- data.frame(population=x, snout.vent=snout)
+  write.csv(snakes, file="snakes.csv", row.names=FALSE)
+```
+
+The aim of this lesson is to (1) leave the participants to come up with their
+code for simple one-way ANOVA, and (2) to experiment with random effects ANOVA.
+
+# The Data
+
+We will use modified data from the example from **Marc Kery's Introduction to WinBUGS for Ecologists**, page 119 (Chapter 9 - ANOVA). The data describe snout-vent lengths in 5 populations of Smooth snake (*Coronella austriaca*) (Uzovka hladka in CZ).
+
+![](figure/snake.png)
+
+
+Loading the data from the web:
+```{r, tidy=FALSE}
+  snakes <- read.csv("http://www.petrkeil.com/wp-content/uploads/2014/02/snakes.csv")
+
+# we will artificially delete 9 data points in the first population
+  snakes <- snakes[-(1:9),]
+  
+  summary(snakes)
+```
+
+Plotting the data:
+```{r, fig.width=8, fig.height=5}
+  par(mfrow=c(1,2))
+  plot(snout.vent ~ population, data=snakes,
+       ylab="Snout-vent length [cm]")
+  boxplot(snout.vent ~ population, data=snakes,
+          ylab="Snout-vent length [cm]",
+          xlab="population",
+          col="grey")
+```
+
+# Fixed-effects ANOVA
+
+For a given snake $i$ in population $j$ **the model** can be written as:
+
+$y_{ij} \sim Normal(\alpha_j, \sigma)$
+
+## Tasks for you:
+
+* Try to write this model in the BUGS language and dump it into a file
+using `cat`.
+
+* Try to prepare the data for this model in the `list` format.
+
+* Try to fit the model and estimate posterior distributions of $\alpha_j$.
+
+* Is there a significant difference of mean snout-vent length between 
+populations 1 and 2?
+
+
+
+
+
