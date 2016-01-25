@@ -24,24 +24,7 @@ Contents
 Contents
 ========================================================
 - I will show you the basics, you should figure out the rest yourselves.
-
-Elementary notation
-========================================================
-- $P(A)$ vs $p(A)$ ... Probability vs probability density
-- $P(A \cap B)$ ... Joint (intersection) probability (AND)
-- $P(A \cup B)$ ... Union probability (OR)
-- $P(A|B)$ ... Conditional probability (GIVEN THAT)
-- $\sim$ ... is distributed as
-- $\propto$ ... is proportional to (related by constant multiplication)
-
-Elementary notation
-========================================================
-- $P(A)$ vs $p(A)$
-- $P(A \cap B)$
-- $P(A \cup B)$
-- $P(A|B)$
-- $\sim$ 
-- $\propto$ 
+- Please, do ask questions and interrupt.
 
 ========================================================
 
@@ -61,27 +44,27 @@ Data
 ========================================================
 
 ```
-              x           y
-1  -1.449468563 -0.43467715
-2  -1.412224970 -2.69728331
-3  -1.356143535 -2.93309685
-4  -1.295288538 -0.63168442
-5  -1.109861637 -1.35620539
-6  -0.472350831 -0.88871584
-7  -0.307326190 -0.05702575
-8  -0.294743273  2.23597211
-9  -0.265656262  1.18730194
-10 -0.045960507  3.31856798
-11  0.005738867  0.51513747
-12  0.275531235  3.22376965
-13  0.362254084  1.25564122
-14  0.399026190  0.92240848
-15  0.512208606  4.54113381
-16  0.532727425  2.86182990
-17  0.742907240  4.51803132
-18  1.075863450  4.51659463
-19  1.676887157  5.18851912
-20  2.021411486  7.63003891
+             x          y
+1  -3.36036438 -8.2255986
+2  -1.67415781 -3.4254527
+3  -1.28843583 -1.6274842
+4  -1.12398265 -1.6607849
+5  -0.79909384 -0.3644841
+6  -0.66600733  0.3086723
+7  -0.59372833  0.1873957
+8  -0.59034664  0.8194618
+9  -0.58946921  0.8746883
+10 -0.11633386  0.9574701
+11 -0.05839936  1.5326324
+12 -0.04541250  1.4010884
+13  0.01851941  1.7617596
+14  0.17032248  2.7476527
+15  0.47701840  3.4969438
+16  0.91837569  3.3880732
+17  1.12012158  5.7335285
+18  1.15159940  5.5316939
+19  1.29460706  6.3070198
+20  1.42823681  5.5571250
 ```
 
 Data
@@ -121,6 +104,24 @@ Can you tell what is based on a parametric model?
 - Survival analysis
 - PCA (principal components analysis)
 - Normal distribution
+
+Elementary notation
+========================================================
+- $P(A)$ vs $p(A)$ ... Probability vs probability density
+- $P(A \cap B)$ ... Joint (intersection) probability (AND)
+- $P(A \cup B)$ ... Union probability (OR)
+- $P(A|B)$ ... Conditional probability (GIVEN THAT)
+- $\sim$ ... is distributed as
+- $\propto$ ... is proportional to (related by constant multiplication)
+
+Elementary notation
+========================================================
+- $P(A)$ vs $p(A)$
+- $P(A \cap B)$
+- $P(A \cup B)$
+- $P(A|B)$
+- $\sim$ 
+- $\propto$ 
 
 Data, model, parameters
 ========================================================
