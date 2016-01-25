@@ -1,7 +1,11 @@
 First real model in JAGS
 ========================================================
 author: Petr Keil
-date: February 2015
+date: January 2016
+
+![](simplest_JAGS-figure/theorem.png)
+
+![](simplest_JAGS-figure/logo.jpg)
 
 JAGS - preparing the data
 ========================================================
@@ -91,7 +95,7 @@ $y_i \sim Poisson(\lambda)$
 model
 {
   # prior
-    lammbda ~ dunif(0, 100)
+    lambda ~ dunif(0, 100)
 
   # likelihood
     for(i in 1:N)
@@ -135,7 +139,10 @@ fitted.model <- jags(data=my.data,  model.file="my_model.txt", parameters.to.sav
 Compiling model graph
    Resolving undeclared variables
    Allocating nodes
-   Graph Size: 20
+Graph information:
+   Observed stochastic nodes: 16
+   Unobserved stochastic nodes: 1
+   Total graph size: 20
 
 Initializing model
 ```
@@ -147,7 +154,7 @@ JAGS - model specification
   plot(as.mcmc(fitted.model))
 ```
 
-![plot of chunk unnamed-chunk-4](simplest_JAGS-figure/unnamed-chunk-4.png) 
+![plot of chunk unnamed-chunk-4](simplest_JAGS-figure/unnamed-chunk-4-1.png) 
 
 JAGS - model specification
 ========================================================
@@ -160,15 +167,18 @@ JAGS - model specification
 Inference for Bugs model at "my_model.txt", fit using jags,
  3 chains, each with 2000 iterations (first 1000 discarded)
  n.sims = 3000 iterations saved
-         mu.vect sd.vect  2.5%    25%    50%    75%  97.5%  Rhat n.eff
-lambda     30.87   1.396  28.2  29.93  30.86  31.78  33.69 1.001  2800
-deviance  165.89   1.433 164.9 164.98 165.33 166.18 169.82 1.004  1900
+         mu.vect sd.vect    2.5%     25%     50%     75%   97.5%  Rhat
+lambda    30.845   1.366  28.279  29.860  30.865  31.765  33.518 1.001
+deviance 165.846   1.313 164.877 164.987 165.339 166.164 169.593 1.014
+         n.eff
+lambda    3000
+deviance   640
 
 For each parameter, n.eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
 
 DIC info (using the rule, pD = var(deviance)/2)
-pD = 1.0 and DIC = 166.9
+pD = 0.9 and DIC = 166.7
 DIC is an estimate of expected predictive error (lower deviance is better).
 ```
 
@@ -179,5 +189,5 @@ JAGS - model specification
   plot(fitted.model)
 ```
 
-![plot of chunk unnamed-chunk-6](simplest_JAGS-figure/unnamed-chunk-6.png) 
+![plot of chunk unnamed-chunk-6](simplest_JAGS-figure/unnamed-chunk-6-1.png) 
 

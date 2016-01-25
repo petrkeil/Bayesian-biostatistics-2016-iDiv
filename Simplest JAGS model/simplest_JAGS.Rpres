@@ -1,7 +1,11 @@
 First real model in JAGS
 ========================================================
 author: Petr Keil
-date: February 2015
+date: January 2016
+
+![](simplest_JAGS-figure/theorem.png)
+
+![](simplest_JAGS-figure/logo.jpg)
 
 JAGS - preparing the data
 ========================================================
@@ -82,7 +86,7 @@ $y_i \sim Poisson(\lambda)$
 model
 {
   # prior
-    lammbda ~ dunif(0, 100)
+    lambda ~ dunif(0, 100)
 
   # likelihood
     for(i in 1:N)
