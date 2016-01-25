@@ -167,8 +167,6 @@ We can encapsulate it into a single function:
 
 Deviance (negative log-likelihood) can be then minimized (likelihood is maximized) in order to find the most likely model parameters - these are the **Maximum Likelihood Estimators (MLE)** of model parameters.
 
-One can use ```optim()``` for automatic likelihood optimization.
-
 # Exercise
 
 **Find and plot the MLE of the Normal model and the 'wings' data.** 
@@ -178,6 +176,29 @@ Use the following functions and scripts:
  hist()
  curve()
 ```
+
+# Using ```optim()``` to find MLE
+
+`optim` needs the `deviance.function` to take only one object, which can be
+a vector (or a list). So I will just put all of the data into `dat` object,
+and the parameters into `par` object.
+
+```{r}
+deviance.function.for.optim <- function(par, dat)
+{
+  LL <- dnorm(x=dat, mean=par[1], sd=par[2], log=TRUE) # note the log!!!
+  deviance <- - sum(LL)
+  return(deviance)
+}
+```
+
+And run the actual optimization:
+```{r}
+optim(par=c(mean=0,var=1), 
+      fn=deviance.function.for.optim, 
+      dat=wings)
+```
+
 
 
 # For further exploration
