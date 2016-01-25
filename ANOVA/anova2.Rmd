@@ -1,7 +1,7 @@
 ---
 title: "ANOVA -- part 2"
 author: "Petr Keil"
-date: "February 2015"
+date: "January 2016"
 output:
   html_document:
     highlight: pygments

@@ -1,7 +1,7 @@
 ---
 title: "T-test"
 author: "Petr Keil"
-date: "February 2015"
+date: "January 2016"
 output:
   html_document:
     highlight: pygments
@@ -30,7 +30,7 @@ In this lesson we will implement a Bayesian version of the classical T-test. We 
   write.csv(falcon, file="falcon.csv", row.names=FALSE)
 ```
 
-We will use the example from **Marc Kery's Introduction to WinBUGS for Ecologists**, page 92 (Section 7.1 - t-test). The data describe wingspan of male and female Peregrine falcon (*Falco peregrinus*) (Sokol stehovavy in CZ).
+We will use the example from **Marc Kery's Introduction to WinBUGS for Ecologists**, page 92 (Section 7.1 - t-test). The data describe wingspan of male and female [Peregrine falcon](https://en.wikipedia.org/wiki/Peregrine_falcon) (*Falco peregrinus*).
 
 ![](figure/falcon.png)
 
@@ -47,7 +47,6 @@ Let's load the data and have a look at the data:
 
 
 # The classical frequentist solution in R
-
 
 We can use the classical two-sample ```t.test()```: 
 ```{r}
@@ -139,7 +138,11 @@ model.fit <- jags(data=falcon.data.1,
                n.iter=2000,
                n.burnin=1000,
                DIC=FALSE)
+```
 
+And we can explore the posterior distributions:
+
+```{r, eval=FALSE}
 plot(as.mcmc(model.fit))
 model.fit
 ```
@@ -195,7 +198,11 @@ model.fit <- jags(data=falcon.data.2,
                n.iter=2000,
                n.burnin=1000,
                DIC=FALSE)
+```
 
+And we can explore the posterior distributions:
+
+```{r, eval=FALSE}
 plot(as.mcmc(model.fit))
 model.fit
 ```

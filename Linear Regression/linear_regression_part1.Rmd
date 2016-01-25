@@ -1,0 +1,71 @@
+---
+title: "Linear regression - Part 1"
+author: "Petr Keil"
+date: "January 2016"
+output:
+  html_document:
+    highlight: pygments
+    number_sections: yes
+    theme: cerulean
+  pdf_document: default
+---
+
+Here we will do classical linear regression in a Bayesian setting. We will also show the difference between **credible intervals** and  **prediction intervals**.
+
+In **Part 1** the data and the model are introduced. Participants then try to implement the model in BUGS. In **Part 2** the solution is exposed, and the difference between credible and prediction intervals is explained.
+
+# The data
+
+We will use data from **Michael Crawley's R Book**, Chapter 10 (Linear Regression). The data show the growht of catepillars fed on experimental diets differing in their tannin contnent.
+
+![danaus caterpillar figure](figure/danaus.png)
+![danaus caterpillar figure](figure/Tannic_acid.png)
+
+To load the data to R directly from the web:
+
+```{r}
+  catepil <- read.table("http://www.petrkeil.com/wp-content/uploads/2016/01/regression.txt", sep="\t", header=TRUE)
+  catepil
+```
+
+The data look like this:
+
+```{r, fig.width=4, fig.height=4}
+  plot(growth~tannin, data=catepil)
+```
+
+# The model
+
+The classical notation:
+$$ growth_i = a + b \times tannin_i + \epsilon_i  $$
+$$ \epsilon_i \sim Normal(0, \sigma)$$
+
+
+An alternative ("Bayesian"") version:
+$$ \mu_i = a + b \times tannin_i $$
+$$ growth_i \sim Normal(\mu_i, \sigma) $$
+
+**Note:** The notations are mathematically equivalent, 
+but the Bayesian notation shows, in my opinion, more directly 
+how we think about the stochastic part of the model.
+
+# Fitting ordinary least squares (OLS) regression
+
+```{r, fig.width=4, fig.height=4}
+  model.lm <- lm(growth~tannin, data=catepil)
+  plot(growth~tannin, data=catepil)
+  abline(model.lm)
+  summary(model.lm)
+```
+
+# Tasks for you
+
+Using the ideas from previous lessons:
+
+- Try to write the model in the BUGS language and dump it into a file using `cat`.
+
+- Try to prepare the data for this model in the `list` format.
+
+- Try to fit the model and estimate posterior distributions of $a$ and $b$.
+
+
