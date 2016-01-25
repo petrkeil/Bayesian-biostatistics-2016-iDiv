@@ -179,6 +179,7 @@ Use the following functions and scripts:
  curve()
 ```
 
+
 # For further exploration
 
 There are other functions derived from probability density functions. I have [a 

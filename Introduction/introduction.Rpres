@@ -21,6 +21,10 @@ Contents
 - Advanced models (mixed, time series)
 - Inference, uncertainty, model selection.
 
+Contents
+========================================================
+- I will show you the basics, you should figure out the rest yourselves.
+
 Elementary notation
 ========================================================
 - $P(A)$ vs $p(A)$ ... Probability vs probability density
