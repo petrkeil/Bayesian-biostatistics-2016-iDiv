@@ -123,7 +123,7 @@ $y_{ij} \sim Normal(\alpha_j, \sigma)$
 
 But now we will also add a **random effect**:
 
-$\alpha_j \sim Normal(\mu, \sigma)$
+$\alpha_j \sim Normal(\mu_{grand}, \sigma_{grand})$
 
 In short, a **random effect means that the parameters itself come from (are outcomes of) a given distribution**, here it is the Normal.
 
