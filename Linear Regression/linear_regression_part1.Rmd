@@ -16,7 +16,7 @@ In **Part 1** the data and the model are introduced. Participants then try to im
 
 # The data
 
-We will use data from **Michael Crawley's R Book**, Chapter 10 (Linear Regression). The data show the growht of catepillars fed on experimental diets differing in their tannin contnent.
+We will use data from **Michael Crawley's R Book**, Chapter 10 (Linear Regression). The data show the growth of catepillars fed on experimental diets differing in their tannin contnent.
 
 ![danaus caterpillar figure](figure/danaus.png)
 ![danaus caterpillar figure](figure/Tannic_acid.png)
