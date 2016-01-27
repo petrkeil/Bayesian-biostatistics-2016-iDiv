@@ -32,7 +32,7 @@ Let's explore the **temporal autocorrelation** a bit:
 
 Formal definition of the 1st-order autoregressive (AR1) model:
 
-$$y_t = beta_0 + \beta_1 y_{t-1} + \epsilon_i$$
+$$y_t = \beta_0 + \beta_1 y_{t-1} + \epsilon_i$$
 
 ## Prepare the data
 
