@@ -65,7 +65,7 @@ cat("
 
     # likelihood
     
-    Annual[1] ~ dnorm(0, 0.001)
+    mu[1] ~ dnorm(0, 0.001)
 
     for(t in 2:N)
     {
