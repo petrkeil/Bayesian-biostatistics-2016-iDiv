@@ -114,7 +114,6 @@ plot(as.mcmc(model.fit.fix))
 model.fit.fix
 ```
 
-
 # Random-effects ANOVA
 
 For a given snake $i$ in population $j$ **the model** can be written in a similar way as for the fixed-effects ANOVA above:
@@ -156,16 +155,18 @@ cat("
     {
       y[i] ~ dnorm(alpha[x[i]], group.tau)
     }
+
+    between.vs.within <- grand.sigma - group.sigma
   }
 ", file="random_anova.txt")
-
 ```
 
 And we will fit the model:
+
 ```{r}
 model.fit.rnd <- jags(data=snake.data, 
                model.file="random_anova.txt",
-               parameters.to.save=c("alpha"),
+               parameters.to.save=c("alpha", "between.vs.within"),
                n.chains=3,
                n.iter=2000,
                n.burnin=1000,
@@ -174,7 +175,6 @@ model.fit.rnd <- jags(data=snake.data,
 plot(as.mcmc(model.fit.rnd))
 model.fit.rnd
 ```
-
 
 # Plotting the posteriors from both models
 

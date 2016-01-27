@@ -1,7 +1,11 @@
 Bayesian Biostatistics - Conclusions
 ========================================================
 author: Petr Keil
-date: February 2015
+date: January 2016
+
+![](conclusions-figure/theorem.png)
+
+![](conclusions-figure/logo.jpg)
 
 You should now be able to use
 ========================================================
@@ -16,7 +20,7 @@ You should now be able to use
 
 Some advice
 ========================================================
-- ALWAYS start with simple models.
+- ALWAYS start with simple models (and small data).
 - Make your models cool and complex only AFTER your simple models run.
 
 Some advice
@@ -48,6 +52,7 @@ And finally
 ========================================================
  - If you have a hammer, every problem turns out to be a nail.
  - Do not forget the biology for all the stats.
+
  
 THANK YOU!
 ========================================================

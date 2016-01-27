@@ -1,0 +1,251 @@
+---
+title: "Simple autoregressive (AR) and Generalized Additive Model (GAM) in JAGS"
+author: "Petr Keil"
+date: "January 22, 2016"
+output: 
+  html_document: 
+    highlight: pygments
+    number_sections: yes
+    theme: cerulean
+    toc: yes
+---
+
+The data are the [HadCRUT3v](https://goo.gl/18n6FB) data set, which I actually took from [this blogpost](http://goo.gl/OIHMhC). Here I reworked the analysis for the Bayesian setting. The data decribe **mean global annual temperature anomalies from 1850 to 2013**, provided at yearly intervals.
+
+# The data
+
+```{r, fig.width=12}
+   gtemp <- read.csv("http://www.petrkeil.com/wp-content/uploads/2016/01/gtemp.csv")
+   plot(Annual~Year, data=gtemp, type="b")
+```
+
+Let's explore the **temporal autocorrelation** a bit:
+
+```{r, fig.width=12}
+   par(mfrow=c(1,2))
+   plot(gtemp$Annual[-164], gtemp$Annual[-1],
+        xlab="T in Year", ylab="T in Year-1")
+   acf(gtemp$Annual, main="")
+```
+
+# AR model in JAGS
+
+## Prepare the data
+
+```{r}
+   ar.data <- list(Annual = gtemp$Annual,
+                   N = nrow(gtemp))
+   
+```
+
+## The model
+
+We will use the `R2jags` library:
+
+```{r, message=FALSE}
+   library(R2jags)
+```
+
+JAGS model specification:
+
+```{r}
+
+cat("
+  model
+  {
+    # priors
+    tau <- 1/(sigma*sigma)
+    sigma ~ dunif(0, 100)      
+    beta0 ~ dnorm(0, 0.001)
+    beta1 ~ dnorm(0, 0.001)
+
+    # likelihood
+    
+    Annual[1] ~ dnorm(0, 0.001)
+
+    for(t in 2:N)
+    {
+      Annual[t] ~ dnorm(mu[t], tau)
+      mu[t] <- beta0 + beta1*Annual[t-1]
+    }    
+  }
+", file="ar.txt")
+```
+
+Fitting the model:
+
+```{r, message=FALSE}   
+   model.fit <- jags(data=ar.data, 
+               model.file="ar.txt",
+               parameters.to.save=c("beta0", "beta1"),
+               n.chains=3,
+               n.iter=2000,
+               n.burnin=1000)
+   model.fit
+```
+
+```{r, message=FALSE, fig.width=12, echo=FALSE, eval=FALSE}   
+   mus <- jags(data=ar.data, 
+               model.file="ar.txt",
+               parameters.to.save=c("mu"),
+               n.chains=3,
+               n.iter=2000,
+               n.burnin=1000, 
+               DIC=FALSE)
+   mus <- data.frame(mus$BUGSoutput$summary)
+   
+   plot(Annual~Year, data=gtemp, type="b")
+   lines(gtemp$Year[-1], mus$X50., col="red", lwd=2)
+```
+
+# Tasks
+
+- Can you get the predicted values of `mu` out and plot them?
+- Is there an autocorrelation in the residuals?
+- Can you fit a 2nd-order autoregressive model?
+
+# Generalized additive model (GAM) model in R
+
+```{r, fig.width=12}
+   library(mgcv)
+
+   m1 <- gam(Annual ~ s(Year), data=gtemp)
+
+   m1.preds <- predict(m1, type="response", se.fit=TRUE)
+   
+   plot(Annual~Year, data=gtemp, type="b")
+      lines(gtemp$Year, m1.preds$fit, lwd=2, col="red")
+      lines(gtemp$Year, m1.preds$fit-m1.preds$se.fit, col="red", lty=2)
+      lines(gtemp$Year, m1.preds$fit+m1.preds$se.fit, col="red", lty=2)
+```
+
+# Fit the GAM model in JAGS
+
+# Use the `jagam` function to build the model
+
+```{r}
+    jagam.model <- jagam(Annual ~ s(Year), 
+                         data=gtemp, 
+                         file="jagam_model.txt")
+    readLines("jagam_model.txt")
+```
+
+# Fit the model
+```{r}
+   library(R2jags)
+   model.fit <- jags(data=jagam.model$jags.data, 
+                     model.file="jagam_model.txt",
+                     parameters.to.save=c("mu"),
+                     n.chains=3,
+                     n.iter=1000,
+                     n.burnin=500,
+                     DIC=FALSE)
+```
+
+# Plot the predicted mean
+
+```{r, fig.width=12}
+   preds <- data.frame(model.fit$BUGSoutput$summary)
+   plot(Annual~Year, data=gtemp, type="b", main="Bayesian estimate of the mean")
+     lines(gtemp$Year, preds$X50., col="red", lwd=2)
+     lines(gtemp$Year, preds$X2.5., lty=2, col="red")
+     lines(gtemp$Year, preds$X97.5., lty=2, col="red")
+     
+  acf(gtemp$Annual-preds$X50.)
+```
+
+# Plot the full prediction interval
+
+```{r}
+cat("
+model {
+  mu <- X %*% b ## expected response
+  for (i in 1:n) 
+  { 
+     y[i] ~ dnorm(mu[i],tau) 
+  } ## response 
+  
+  scale <- 1/tau ## convert tau to standard GLM scale
+  tau ~ dgamma(.05,.005) ## precision parameter prior 
+  ## Parametric effect priors CHECK tau=1/1.7^2 is appropriate!
+  for (i in 1:1) { b[i] ~ dnorm(0,0.36) }
+  ## prior for s(Year)... 
+  K1 <- S1[1:9,1:9] * lambda[1]  + S1[1:9,10:18] * lambda[2]
+  b[2:10] ~ dmnorm(zero[2:10],K1) 
+  ## smoothing parameter priors CHECK...
+  for (i in 1:2) {
+    lambda[i] ~ dgamma(.05,.005)
+    rho[i] <- log(lambda[i])
+  }
+
+  # PREDICTIONS
+  for (i in 1:n)
+  {
+     pred[i] ~ dnorm(mu[i],tau) 
+  }
+}
+", file="jagam_model_with_preds.txt")
+```
+
+# Fit the model
+```{r}
+   library(R2jags)
+   model.fit <- jags(data=jagam.model$jags.data, 
+                     model.file="jagam_model_with_preds.txt",
+                     parameters.to.save=c("pred"),
+                     n.chains=3,
+                     n.iter=1000,
+                     n.burnin=500,
+                     DIC=FALSE)
+```
+
+# Plot the predicted mean
+
+```{r, fig.width=12}
+   preds <- data.frame(model.fit$BUGSoutput$summary)
+   plot(Annual~Year, data=gtemp, type="b", main="Full Bayesian prediction interval")
+     lines(gtemp$Year, preds$X50., col="red", lwd=2)
+     lines(gtemp$Year, preds$X2.5., lty=2, col="red")
+     lines(gtemp$Year, preds$X97.5., lty=2, col="red")
+```
+
+# Combining the AR1 and GAM model
+
+```{r}
+   Annual.tminus1 <- c(0, gtemp$Annual[-length(gtemp$Annual)]) 
+   gtemp <- data.frame(gtemp, Annual.tminus1)
+```
+
+```{r}
+    jagam.model.ar <- jagam(Annual ~ s(Year) + Annual.tminus1, 
+                         data=gtemp, 
+                         file="jagam_model_ar.txt")
+```
+
+# Fit the model
+
+```{r}
+   library(R2jags)
+   model.fit.ar <- jags(data=jagam.model.ar$jags.data, 
+                     model.file="jagam_model_ar.txt",
+                     parameters.to.save=c("mu"),
+                     n.chains=3,
+                     n.iter=1000,
+                     n.burnin=500,
+                     DIC=FALSE)
+```
+
+```{r, fig.width=12}
+   preds <- data.frame(model.fit.ar$BUGSoutput$summary)
+   plot(Annual~Year, data=gtemp, type="b", main="Full Bayesian prediction interval")
+   
+     lines(gtemp$Year, preds$X50., col="red", lwd=2)
+     lines(gtemp$Year, preds$X2.5., lty=2, col="red")
+     lines(gtemp$Year, preds$X97.5., lty=2, col="red")
+  acf(gtemp$Annual-preds$X50.)
+```
+
+
+
+
+

@@ -1,0 +1,19 @@
+
+  model
+  {
+    # priors
+    tau <- 1/(sigma*sigma)
+    sigma ~ dunif(0, 100)      
+    beta0 ~ dnorm(0, 0.001)
+    beta1 ~ dnorm(0, 0.001)
+
+    # likelihood
+    
+    Annual[1] ~ dnorm(0, 0.001)
+
+    for(t in 2:N)
+    {
+      Annual[t] ~ dnorm(mu[t], tau)
+      mu[t] <- beta0 + beta1*Annual[t-1]
+    }    
+  }

@@ -18,4 +18,6 @@
     {
       y[i] ~ dnorm(alpha[x[i]], group.tau)
     }
+
+    between.vs.within <- grand.sigma - group.sigma
   }
