@@ -1,6 +1,6 @@
 ---
 title: "Site occupancy model with imperfect detectability"
-author: "Petr Keil"
+author: "Petr Keil (based on Marc Kéry's chapter)"
 date: "February 2015"
 output:
   html_document:
