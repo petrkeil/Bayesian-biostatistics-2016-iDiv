@@ -6,13 +6,16 @@
     sigma ~ dunif(0, 100)      
     beta0 ~ dnorm(0, 0.001)
     beta1 ~ dnorm(0, 0.001)
+    mu[1] ~ dnorm(0, 0.001)
 
     # likelihood
     
-    mu[1] ~ dnorm(0, 0.001)
+    eps[1] <- Annual[1] - mu[1]
+
     for(t in 2:N)
     {
-      mu[t] <- beta0 + beta1*Annual[t-1]
+      mu[t] <- beta0 + beta1*eps[t-1]
+      eps[t] <- Annual[t] - mu[t]
     }  
     for(t in 1:N)
     {
